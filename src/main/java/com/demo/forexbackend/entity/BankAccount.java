@@ -17,6 +17,5 @@ public class BankAccount extends Account{
 
     @ManyToOne
     @JoinColumn(name = "trader")
-    @JsonIgnoreProperties("bankAccounts")
     private Trader trader;
 }

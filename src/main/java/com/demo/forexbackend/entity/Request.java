@@ -1,9 +1,7 @@
 package com.demo.forexbackend.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -18,8 +16,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Request {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
+    @SequenceGenerator(
+            name = "request_id_sequence",
+            sequenceName = "request_id_sequence"
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "request_id_sequence"
+    )
     private Long id;
 
     @CreationTimestamp
@@ -31,17 +35,14 @@ public class Request {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    @Column(nullable = false)
-    @NotBlank(message = "rate field is required")
+    private String message;
     private Double rate;
 
     @Column(nullable = false)
-    @NotBlank(message = "amount field is required")
     private Double amount;
 
     @ManyToOne
     @JoinColumn(name = "trader")
-    @JsonIgnoreProperties("requests")
     private Trader trader;
 
     @ManyToOne
@@ -56,7 +57,6 @@ public class Request {
     @JoinColumn(name = "targetCurrency")
     private Currency targetCurrency;
 
-    private String message;
 
     @ManyToOne
     @JoinColumn(name = "wallet")

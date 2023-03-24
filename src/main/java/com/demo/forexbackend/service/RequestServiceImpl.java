@@ -51,23 +51,16 @@ public class RequestServiceImpl implements RequestService {
 
         if(amount > wallet.getBalance()) {
             request.setStatus(Status.FAILED);
-            request.setMessage("Insufficient balance in wallet");
+            request.setMessage("Unsuccessful due to insufficient balance in wallet");
         }
         else {
             request.setStatus(Status.COMPLETED);
-            request.setMessage("Completed");
-
+            request.setMessage("Successful");
             wallet.setBalance(wallet.getBalance() - amount);
-            walletRepository.save(wallet);
-
             bankAccount.setBalance(bankAccount.getBalance() + (amount * exchange.getRate()));
-            bankAccountRepository.save(bankAccount);
-
             // TODO: Update provider's account balance
         }
 
-        var res = requestRepository.save(request);
-
-        return mapper.requestToDto(res);
+        return mapper.requestToDto(requestRepository.save(request));
     }
 }

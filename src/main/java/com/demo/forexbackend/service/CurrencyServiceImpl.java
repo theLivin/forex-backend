@@ -19,7 +19,7 @@ public class CurrencyServiceImpl implements CurrencyService{
 
     @Override
     public List<ExchangeDto> getExchanges(String currencyCode) {
-        Currency currency = currencyRepository.findById(currencyCode).orElseThrow(() -> new NotFoundException(String.format("Currency was not found with parameters {code=%s}", currencyCode)));
+        Currency currency = currencyRepository.findById(currencyCode).orElseThrow(() -> new NotFoundException(String.format("Currency with parameters {id=%s} is currently not available", currencyCode)));
         return currency.getExchanges().stream().map(mapper::exchangeToDto).toList();
     }
 
