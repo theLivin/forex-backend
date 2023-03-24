@@ -12,3 +12,5 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create-drop
+
+jwk-set-url: https://www.googleapis.com/oauth2/v2/certs

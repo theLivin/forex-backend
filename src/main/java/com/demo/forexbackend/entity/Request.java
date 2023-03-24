@@ -4,12 +4,18 @@ package com.demo.forexbackend.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -39,8 +45,8 @@ public class Request {
     private Trader trader;
 
     @ManyToOne
-    @JoinColumn(name = "provider")
-    private Provider provider;
+    @JoinColumn(name = "exchange")
+    private Exchange exchange;
 
     @ManyToOne
     @JoinColumn(name = "sourceCurrency")
