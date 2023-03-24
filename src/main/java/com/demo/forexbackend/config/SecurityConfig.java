@@ -16,6 +16,7 @@ public class SecurityConfig {
     private String jwkSetUrl;
 
     private static final String[] AUTH_WHITELIST = {
+            "/currencies"
     };
 
     @Bean

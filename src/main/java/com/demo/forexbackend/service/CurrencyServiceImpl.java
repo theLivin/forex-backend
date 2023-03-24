@@ -1,6 +1,7 @@
 package com.demo.forexbackend.service;
 
 import com.demo.forexbackend.config.EntityMapper;
+import com.demo.forexbackend.dto.CurrencyDto;
 import com.demo.forexbackend.dto.ExchangeDto;
 import com.demo.forexbackend.entity.Currency;
 import com.demo.forexbackend.error.NotFoundException;
@@ -20,5 +21,10 @@ public class CurrencyServiceImpl implements CurrencyService{
     public List<ExchangeDto> getExchanges(String currencyCode) {
         Currency currency = currencyRepository.findById(currencyCode).orElseThrow(() -> new NotFoundException(String.format("Currency was not found with parameters {code=%s}", currencyCode)));
         return currency.getExchanges().stream().map(mapper::exchangeToDto).toList();
+    }
+
+    @Override
+    public List<CurrencyDto> getCurrencies() {
+        return currencyRepository.findAll().stream().map(mapper::currencyToDto).toList();
     }
 }

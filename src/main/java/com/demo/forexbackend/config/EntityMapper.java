@@ -16,4 +16,5 @@ public interface EntityMapper {
     ExchangeDto exchangeToDto(Exchange exchange);
     WalletDto walletToDto(Wallet wallet);
     BankAccountDto bankAccountToDto(BankAccount bankAccount);
+    CurrencyDto currencyToDto(Currency currency);
 }
