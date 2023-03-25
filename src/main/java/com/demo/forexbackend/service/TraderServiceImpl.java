@@ -7,6 +7,7 @@ import com.demo.forexbackend.dto.TraderDto;
 import com.demo.forexbackend.dto.WalletDto;
 import com.demo.forexbackend.entity.*;
 import com.demo.forexbackend.error.NotFoundException;
+import com.demo.forexbackend.error.NotNullException;
 import com.demo.forexbackend.payload.BankAccountPayload;
 import com.demo.forexbackend.payload.WalletPayload;
 import com.demo.forexbackend.repository.BankAccountRepository;
@@ -107,6 +108,7 @@ public class TraderServiceImpl implements TraderService {
     public BankAccountDto addBankAccount(Long traderId, BankAccountPayload payload) {
         Trader trader = traderRepository.findById(traderId).orElseThrow(() -> new NotFoundException(String.format("Trader was not found with parameters {id=%d}", traderId)));
         Currency currency = currencyRepository.findById(payload.getCurrency()).orElseThrow(() -> new NotFoundException(String.format("Currency was not found with parameters {id=%s}", payload.getCurrency())));
+        if(Objects.equals(payload.getName(), "")) throw new NotNullException("Name field cannot be null");
         BankAccount bankAccount = BankAccount.builder().name(payload.getName()).build();
         bankAccount.setCurrency(currency);
         bankAccount.setTrader(trader);

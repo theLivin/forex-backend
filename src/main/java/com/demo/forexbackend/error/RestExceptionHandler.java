@@ -25,6 +25,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({
+            NotNullException.class,
+    })
+    public ResponseEntity<ErrorResponseDto> notNullExceptionHandler(Exception exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ErrorResponseDto.builder()
+                        .success(false)
+                        .message(exception.getMessage())
+                        .build());
+    }
+
+    @ExceptionHandler({
             ConflictException.class,
     })
     public ResponseEntity<ErrorResponseDto> conflictExceptionHandler(Exception exception) {
