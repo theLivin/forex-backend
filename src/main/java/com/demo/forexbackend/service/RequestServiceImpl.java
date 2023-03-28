@@ -41,8 +41,8 @@ public class RequestServiceImpl implements RequestService {
         var targetCurrency = currencyRepository.findById(targetCurrencyId).orElseThrow(() -> new NotFoundException(String.format(errorMessageStr, "Target Currency", targetCurrencyId)));
         var bankAccount = bankAccountRepository.findById(bankAccountId).orElseThrow(() -> new NotFoundException(String.format(errorMessageNum, "Bank Account", bankAccountId)));
 
-        if (wallet.getCurrency() != sourceCurrency) throw new ConflictException(String.format("Cannot purchase %s from %s wallet", sourceCurrency.getCode(), wallet.getCurrency().getCode()));
-        if (bankAccount.getCurrency() != targetCurrency) throw new ConflictException(String.format("Cannot transfer %s to %s bank account", targetCurrency.getCode(), bankAccount.getCurrency().getCode()));
+//        if (wallet.getCurrency() != sourceCurrency) throw new ConflictException(String.format("Cannot purchase %s from %s wallet", sourceCurrency.getCode(), wallet.getCurrency().getCode()));
+//        if (bankAccount.getCurrency() != targetCurrency) throw new ConflictException(String.format("Cannot transfer %s to %s bank account", targetCurrency.getCode(), bankAccount.getCurrency().getCode()));
 
         Request request = Request.builder()
                 .amount(amount).rate(exchange.getRate()).trader(trader).exchange(exchange)
@@ -53,9 +53,17 @@ public class RequestServiceImpl implements RequestService {
             request.setStatus(Status.FAILED);
             request.setMessage("Unsuccessful due to insufficient balance in wallet");
         }
+        else if (wallet.getCurrency() != sourceCurrency) {
+            request.setStatus(Status.FAILED);
+            request.setMessage(String.format("Could not purchase %s from %s wallet", sourceCurrency.getCode(), wallet.getCurrency().getCode()));
+        }
+        else if (bankAccount.getCurrency() != targetCurrency) {
+            request.setStatus(Status.FAILED);
+            request.setMessage(String.format("Could not transfer %s to %s bank account", targetCurrency.getCode(), bankAccount.getCurrency().getCode()));
+        }
         else {
             request.setStatus(Status.COMPLETED);
-            request.setMessage("Successful");
+            request.setMessage("Success!");
             wallet.setBalance(wallet.getBalance() - amount);
             bankAccount.setBalance(bankAccount.getBalance() + (amount * exchange.getRate()));
             // TODO: Update provider's account balance
